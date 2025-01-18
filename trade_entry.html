@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Entry</title>
+</head>
+<body>
+    <h1>Enter Your Trade</h1>
+    <form id="tradeForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="text" id="symbol" placeholder="Stock Symbol" required>
+        <input type="text" id="option_type" placeholder="Call/Put" required>
+        <input type="number" id="strike_price" placeholder="Strike Price" required>
+        <input type="date" id="expiry_date" required>
+        <button type="submit">Submit Trade</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.0.0/dist/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect('http://127.0.0.1:5000/');
+
+        document.getElementById('tradeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const tradeData = {
+                name: document.getElementById('name').value,
+                symbol: document.getElementById('symbol').value,
+                option_type: document.getElementById('option_type').value,
+                strike_price: document.getElementById('strike_price').value,
+                expiry_date: document.getElementById('expiry_date').value
+            };
+
+            socket.emit('new_trade', tradeData);
+
+            // Clear the form fields
+            document.getElementById('tradeForm').reset();
+        });
+    </script>
+</body>
+</html>
