@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Trade Banner</title>
+    <style>
+        .banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .banner-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll-left 10s linear infinite;
+        }
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <div class="banner-content" id="tradeBanner">
+            <!-- Dynamic trade messages will appear here -->
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.0.0/dist/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect('http://127.0.0.1:5000/');
+
+        socket.on('display_trade', function(data) {
+            const tradeMessage = document.createElement('span');
+            tradeMessage.textContent = `${data.name} bought ${data.symbol} ${data.option_type} ${data.strike_price} for ${data.expiry_date}. `;
+            document.getElementById('tradeBanner').appendChild(tradeMessage);
+        });
+    </script>
+</body>
+</html>
